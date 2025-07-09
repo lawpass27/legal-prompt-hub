@@ -1,7 +1,7 @@
 # 테스트 사용자 생성
 user = User.create!(
-  email: "test@example.com",
-  password: "password123",
+  email: "lawpass2727@gmail.com",
+  password: "cleann1027!",
   name: "테스트 변호사"
 )
 
@@ -29,4 +29,4 @@ prompts.each do |prompt_data|
 end
 
 puts "시드 데이터 생성 완료!"
-puts "테스트 계정: test@example.com / password123"
+puts "테스트 계정: lawpass2727@gmail.com / cleann1027!"
