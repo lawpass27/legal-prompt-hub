@@ -23,5 +23,12 @@ module LegalPromptHub
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    
+    # Set default locale to Korean
+    config.i18n.default_locale = :ko
+    config.i18n.available_locales = [:ko, :en]
+    
+    # Set timezone to Seoul
+    config.time_zone = "Seoul"
   end
 end

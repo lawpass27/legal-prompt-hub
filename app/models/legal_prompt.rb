@@ -1,7 +1,7 @@
 class LegalPrompt < ApplicationRecord
   belongs_to :user
   
-  enum category: {
+  enum :category, {
     party_analysis: 0,      # 당사자정보분석
     fact_organizing: 1,     # 사실관계정리
     evidence_linking: 2,    # 증거연결

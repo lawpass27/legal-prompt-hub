@@ -1,4 +1,37 @@
-<div>
-  <h1 class="font-bold text-4xl">LegalPrompts#show</h1>
-  <p>Find me in app/views/legal_prompts/show.html.erb</p>
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <div class="mb-6">
+    <%= link_to "← 목록으로", legal_prompts_path, class: "text-gray-600 hover:text-gray-800" %>
+  </div>
+  
+  <div class="bg-white rounded-lg shadow-sm">
+    <div class="px-8 py-6 border-b border-gray-200">
+      <h1 class="text-2xl font-bold text-gray-800 mb-2"><%= @legal_prompt.title %></h1>
+      <div class="flex items-center text-sm text-gray-600 space-x-4">
+        <span class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full"><%= @legal_prompt.category_korean %></span>
+        <span><%= @legal_prompt.user.name %></span>
+        <span><%= @legal_prompt.created_at.strftime("%Y년 %m월 %d일") %></span>
+      </div>
+    </div>
+    
+    <div class="px-8 py-6" data-controller="clipboard">
+      <pre class="bg-gray-50 p-6 rounded-lg whitespace-pre-wrap text-gray-800 mb-6" data-clipboard-target="content"><%= @legal_prompt.content %></pre>
+      
+      <button type="button" 
+              data-action="click->clipboard#copy"
+              data-clipboard-target="button"
+              class="w-full bg-emerald-600 text-white py-3 px-6 rounded-lg hover:bg-emerald-700 transition duration-200 font-medium">
+        📋 복사하기
+      </button>
+    </div>
+    
+    <% if user_signed_in? && @legal_prompt.user == current_user %>
+      <div class="px-8 py-4 bg-gray-50 rounded-b-lg flex justify-end space-x-4">
+        <%= link_to "수정", edit_legal_prompt_path(@legal_prompt), 
+            class: "px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition duration-200" %>
+        <%= button_to "삭제", @legal_prompt, method: :delete, 
+            data: { turbo_confirm: "정말로 삭제하시겠습니까?" },
+            class: "px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition duration-200" %>
+      </div>
+    <% end %>
+  </div>
 </div>
