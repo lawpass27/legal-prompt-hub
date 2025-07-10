@@ -4,7 +4,12 @@ class LegalPromptsController < ApplicationController
   before_action :check_owner, only: [:edit, :update, :destroy]
 
   def index
-    @legal_prompts = LegalPrompt.includes(:user).recent
+    if params[:tag].present?
+      @legal_prompts = LegalPrompt.tagged_with(params[:tag]).includes(:user, :tags).recent
+      @current_tag = params[:tag]
+    else
+      @legal_prompts = LegalPrompt.includes(:user, :tags).recent
+    end
   end
 
   def show
@@ -47,7 +52,7 @@ class LegalPromptsController < ApplicationController
   end
 
   def legal_prompt_params
-    params.require(:legal_prompt).permit(:title, :category, :content)
+    params.require(:legal_prompt).permit(:title, :category, :content, :tag_list)
   end
 
   def check_owner

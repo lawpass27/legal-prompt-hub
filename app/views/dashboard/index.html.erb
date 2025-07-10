@@ -22,6 +22,11 @@
               <h4 class="text-base font-medium text-gray-800 mb-1"><%= prompt.title %></h4>
               <div class="flex items-center text-sm text-gray-500 space-x-3">
                 <span class="bg-gray-100 px-2 py-1 rounded"><%= prompt.category_korean %></span>
+                <% if prompt.tags.any? %>
+                  <% prompt.tags.limit(2).each do |tag| %>
+                    <span class="text-gray-400">#<%= tag.name %></span>
+                  <% end %>
+                <% end %>
                 <span><%= time_ago_in_words(prompt.created_at) %>전</span>
               </div>
             <% end %>

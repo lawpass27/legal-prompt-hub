@@ -2,7 +2,7 @@
 user = User.create!(
   email: "lawpass2727@gmail.com",
   password: "cleann1027!",
-  name: "테스트 변호사"
+  name: "윤두철 변호사"
 )
 
 # 샘플 프롬프트 생성
@@ -24,8 +24,20 @@ prompts = [
   }
 ]
 
-prompts.each do |prompt_data|
-  user.legal_prompts.create!(prompt_data)
+prompts.each_with_index do |prompt_data, index|
+  prompt = user.legal_prompts.create!(prompt_data)
+  
+  # 태그 추가
+  case index
+  when 0
+    prompt.tag_list = "계약서, 당사자분석, 민사"
+  when 1
+    prompt.tag_list = "사실관계, 정리, 소송"
+  when 2
+    prompt.tag_list = "판례검색, 키워드, 리서치"
+  end
+  
+  prompt.save!
 end
 
 puts "시드 데이터 생성 완료!"

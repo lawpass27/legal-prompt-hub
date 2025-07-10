@@ -9,6 +9,47 @@ ko:
       legal_principles: "관련법리추출"
       case_search: "유사판례검색"
   
+  devise:
+    sessions:
+      user:
+        signed_in: "로그인되었습니다."
+      signed_in: "로그인되었습니다."
+  
+  activerecord:
+    attributes:
+      user:
+        email: "이메일"
+        password: "비밀번호"
+        password_confirmation: "비밀번호 확인"
+        name: "이름"
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: "을(를) 입력해주세요"
+              invalid: "형식이 올바르지 않습니다"
+              taken: "은(는) 이미 사용중입니다"
+            password:
+              blank: "을(를) 입력해주세요"
+              too_short: "은(는) %{count}자 이상이어야 합니다"
+            password_confirmation:
+              confirmation: "이(가) 일치하지 않습니다"
+            name:
+              blank: "을(를) 입력해주세요"
+  
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      not_saved: 
+        one: "1개의 오류로 인해 저장할 수 없습니다"
+        other: "%{count}개의 오류로 인해 저장할 수 없습니다"
+      blank: "을(를) 입력해주세요"
+      invalid: "형식이 올바르지 않습니다"
+      taken: "은(는) 이미 사용중입니다"
+      too_short: "은(는) %{count}자 이상이어야 합니다"
+      confirmation: "이(가) 일치하지 않습니다"
+  
   time:
     formats:
       default: "%Y년 %m월 %d일"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_09_223251) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_10_090541) do
   create_table "legal_prompts", force: :cascade do |t|
     t.string "title"
     t.integer "category"
@@ -19,6 +19,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_09_223251) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_legal_prompts_on_user_id"
+  end
+
+  create_table "legal_prompts_tags", id: false, force: :cascade do |t|
+    t.integer "legal_prompt_id", null: false
+    t.integer "tag_id", null: false
+    t.index ["legal_prompt_id", "tag_id"], name: "index_legal_prompts_tags_on_legal_prompt_id_and_tag_id"
+    t.index ["tag_id", "legal_prompt_id"], name: "index_legal_prompts_tags_on_tag_id_and_legal_prompt_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|

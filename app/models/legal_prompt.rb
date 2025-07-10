@@ -1,5 +1,6 @@
 class LegalPrompt < ApplicationRecord
   belongs_to :user
+  has_and_belongs_to_many :tags
   
   enum :category, {
     party_analysis: 0,      # 당사자정보분석
@@ -20,4 +21,18 @@ class LegalPrompt < ApplicationRecord
   def category_korean
     I18n.t("legal_prompt.categories.#{category}")
   end
+  
+  def tag_list=(names)
+    self.tags = names.split(',').map do |n|
+      Tag.where(name: n.strip.downcase.gsub(/\s+/, '-')).first_or_create!
+    end.uniq
+  end
+  
+  def tag_list
+    tags.map(&:name).join(', ')
+  end
+  
+  scope :tagged_with, ->(name) {
+    joins(:tags).where(tags: { name: name })
+  }
 end

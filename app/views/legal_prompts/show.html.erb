@@ -1,37 +1,173 @@
-<div class="max-w-4xl mx-auto px-4 py-8">
-  <div class="mb-6">
-    <%= link_to "← 목록으로", legal_prompts_path, class: "text-gray-600 hover:text-gray-800" %>
-  </div>
-  
-  <div class="bg-white rounded-lg shadow-sm">
-    <div class="px-8 py-6 border-b border-gray-200">
-      <h1 class="text-2xl font-bold text-gray-800 mb-2"><%= @legal_prompt.title %></h1>
-      <div class="flex items-center text-sm text-gray-600 space-x-4">
-        <span class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full"><%= @legal_prompt.category_korean %></span>
-        <span><%= @legal_prompt.user.name %></span>
-        <span><%= @legal_prompt.created_at.strftime("%Y년 %m월 %d일") %></span>
+<div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="mb-8">
+      <%= link_to legal_prompts_path, class: "inline-flex items-center text-sm font-medium text-gray-600 hover:text-emerald-600 transition-colors group" do %>
+        <svg class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        모든 프롬프트 보기
+      <% end %>
+    </nav>
+    
+    <!-- Main Card -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+      <!-- Header Section -->
+      <div class="bg-gradient-to-r from-emerald-50 to-green-50 px-8 py-8 border-b border-emerald-100">
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div class="flex-1">
+            <h1 class="text-3xl font-bold text-gray-900 mb-4"><%= @legal_prompt.title %></h1>
+            <div class="flex flex-wrap items-center gap-4">
+              <!-- Category Badge -->
+              <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-emerald-100 text-emerald-800 shadow-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                </svg>
+                <%= @legal_prompt.category_korean %>
+              </span>
+              
+              <!-- Tags -->
+              <% if @legal_prompt.tags.any? %>
+                <div class="flex flex-wrap gap-2">
+                  <% @legal_prompt.tags.each do |tag| %>
+                    <%= link_to legal_prompts_path(tag: tag.name), 
+                        class: "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors" do %>
+                      #<%= tag.name %>
+                    <% end %>
+                  <% end %>
+                </div>
+              <% end %>
+              
+              <!-- Author Info -->
+              <div class="flex items-center text-sm text-gray-600">
+                <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center mr-2">
+                  <span class="text-xs font-medium text-gray-600"><%= @legal_prompt.user.name.first %></span>
+                </div>
+                <span class="font-medium"><%= @legal_prompt.user.name %></span>
+              </div>
+              
+              <!-- Date -->
+              <div class="flex items-center text-sm text-gray-500">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <%= @legal_prompt.created_at.strftime("%Y년 %m월 %d일") %>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Quick Actions (for owners) -->
+          <% if user_signed_in? && @legal_prompt.user == current_user %>
+            <div class="flex items-center space-x-2">
+              <%= link_to edit_legal_prompt_path(@legal_prompt), 
+                  class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" do %>
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+                수정
+              <% end %>
+            </div>
+          <% end %>
+        </div>
       </div>
+    
+      <!-- Content Section -->
+      <div class="p-8" data-controller="clipboard">
+        <div class="mb-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            프롬프트 내용
+          </h2>
+          
+          <!-- Content Box -->
+          <div class="relative group">
+            <pre class="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-xl whitespace-pre-wrap text-gray-800 font-mono text-sm leading-relaxed border border-gray-200" 
+                 data-clipboard-target="content"><%= @legal_prompt.content %></pre>
+            
+            <!-- Copy Indicator -->
+            <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+              <span class="text-xs text-gray-500 bg-white px-2 py-1 rounded shadow-sm">클릭하여 복사</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Copy Button -->
+        <div class="flex flex-col sm:flex-row gap-4">
+          <button type="button" 
+                  data-action="click->clipboard#copy"
+                  data-clipboard-target="button"
+                  class="flex-1 inline-flex items-center justify-center px-6 py-4 text-base font-medium rounded-xl text-white bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl group">
+            <svg class="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+            </svg>
+            <span data-clipboard-success-text="복사되었습니다!">프롬프트 복사하기</span>
+          </button>
+        </div>
+        
+        <!-- Usage Tips -->
+        <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <div class="flex">
+            <svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div class="text-sm text-blue-800">
+              <p class="font-medium mb-1">사용 팁</p>
+              <p>이 프롬프트를 복사한 후 ChatGPT, Claude 등의 AI 서비스에 붙여넣고 필요한 내용을 추가하여 사용하세요.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <% if user_signed_in? && @legal_prompt.user == current_user %>
+        <!-- Owner Actions -->
+        <div class="px-8 py-6 bg-gray-50 border-t border-gray-200">
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+            <p class="text-sm text-gray-600">
+              <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+              이 프롬프트의 소유자입니다.
+            </p>
+            <div class="flex items-center space-x-3">
+              <%= link_to edit_legal_prompt_path(@legal_prompt), 
+                  class: "inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" do %>
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+                프롬프트 수정
+              <% end %>
+              <%= button_to @legal_prompt, method: :delete, 
+                  data: { turbo_confirm: "이 프롬프트를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다." },
+                  class: "inline-flex items-center px-4 py-2 text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition-colors" do %>
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+                프롬프트 삭제
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
     
-    <div class="px-8 py-6" data-controller="clipboard">
-      <pre class="bg-gray-50 p-6 rounded-lg whitespace-pre-wrap text-gray-800 mb-6" data-clipboard-target="content"><%= @legal_prompt.content %></pre>
-      
-      <button type="button" 
-              data-action="click->clipboard#copy"
-              data-clipboard-target="button"
-              class="w-full bg-emerald-600 text-white py-3 px-6 rounded-lg hover:bg-emerald-700 transition duration-200 font-medium">
-        📋 복사하기
-      </button>
-    </div>
-    
-    <% if user_signed_in? && @legal_prompt.user == current_user %>
-      <div class="px-8 py-4 bg-gray-50 rounded-b-lg flex justify-end space-x-4">
-        <%= link_to "수정", edit_legal_prompt_path(@legal_prompt), 
-            class: "px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition duration-200" %>
-        <%= button_to "삭제", @legal_prompt, method: :delete, 
-            data: { turbo_confirm: "정말로 삭제하시겠습니까?" },
-            class: "px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition duration-200" %>
+    <!-- Related Prompts (Optional) -->
+    <div class="mt-8">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">관련 프롬프트</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <% LegalPrompt.where(category: @legal_prompt.category).where.not(id: @legal_prompt.id).limit(3).each do |prompt| %>
+          <%= link_to prompt, class: "block p-4 bg-white rounded-lg border border-gray-200 hover:border-emerald-300 hover:shadow-md transition-all" do %>
+            <h4 class="font-medium text-gray-900 mb-2 line-clamp-1"><%= prompt.title %></h4>
+            <p class="text-sm text-gray-600 line-clamp-2"><%= truncate(prompt.content, length: 80) %></p>
+            <div class="mt-3 flex items-center text-xs text-gray-500">
+              <span><%= prompt.user.name %></span>
+              <span class="mx-2">·</span>
+              <span><%= time_ago_in_words(prompt.created_at) %>전</span>
+            </div>
+          <% end %>
+        <% end %>
       </div>
-    <% end %>
+    </div>
   </div>
 </div>
