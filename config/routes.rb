@@ -7,7 +7,11 @@ Rails.application.routes.draw do
   
   root "legal_prompts#index"
   
-  resources :legal_prompts
+  resources :legal_prompts do
+    resources :comments, only: [:create]
+  end
+  
+  resources :comments, only: [:destroy]
   
   # Reveal health status on /up that returns 200 if the app boots with no exceptions
   get "up" => "rails/health#show", as: :rails_health_check

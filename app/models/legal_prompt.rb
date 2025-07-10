@@ -1,6 +1,7 @@
 class LegalPrompt < ApplicationRecord
   belongs_to :user
   has_and_belongs_to_many :tags
+  has_many :comments, dependent: :destroy
   
   enum :category, {
     party_analysis: 0,      # 당사자정보분석

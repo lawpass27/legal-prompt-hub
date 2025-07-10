@@ -13,6 +13,8 @@ class LegalPromptsController < ApplicationController
   end
 
   def show
+    @comments = @legal_prompt.comments.includes(:user).recent
+    @comment = @legal_prompt.comments.build if user_signed_in?
   end
 
   def new
@@ -52,7 +54,7 @@ class LegalPromptsController < ApplicationController
   end
 
   def legal_prompt_params
-    params.require(:legal_prompt).permit(:title, :category, :content, :tag_list)
+    params.require(:legal_prompt).permit(:title, :category, :content, :description, :tag_list)
   end
 
   def check_owner

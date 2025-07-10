@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_10_090541) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_10_093239) do
+  create_table "comments", force: :cascade do |t|
+    t.text "content"
+    t.integer "user_id", null: false
+    t.integer "legal_prompt_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["legal_prompt_id"], name: "index_comments_on_legal_prompt_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
   create_table "legal_prompts", force: :cascade do |t|
     t.string "title"
     t.integer "category"
@@ -18,6 +28,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_10_090541) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "description"
     t.index ["user_id"], name: "index_legal_prompts_on_user_id"
   end
 
@@ -48,5 +59,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_10_090541) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "comments", "legal_prompts"
+  add_foreign_key "comments", "users"
   add_foreign_key "legal_prompts", "users"
 end
